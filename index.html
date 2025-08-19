@@ -110,7 +110,7 @@
 					});
 				}
 
-				overlay.innerText = `Confirmed, Books Received. Thanks for participating ${name}!`;
+				overlay.innerHTML = `Confirmed, Books Received.<br>Thanks for participating, ${name}!`;
 				setTimeout(() => overlay.style.display = 'none', 3000);
 
 				cart.length = 0;

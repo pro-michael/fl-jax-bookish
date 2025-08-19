@@ -136,6 +136,7 @@ button:hover {
     font-size: 28px;
     align-items: center;
     justify-content: center;
+	flex-direction: column;
     text-align: center;
     padding: 20px;
     z-index: 1000;
@@ -160,5 +161,8 @@ button:hover {
     }
 	.book-info button {
 		align-self: center;
+	}
+	.overlay {
+		font-size: 18px;
 	}
 }
