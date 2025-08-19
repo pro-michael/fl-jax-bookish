@@ -11,15 +11,15 @@
 <body>
 	<h1>FL Jax Bookish</h1>
 	<h2>Beers & Books</h2>
-	<p>What should we read next?</p>
-	<p>Suggest up to 5 books for our reading list.</p>
+	<h3>What should we read next?</h3>
+	
 	
 	<div>
 		<label for="username">What's Your Name?</label><br>
 		<input type="text" id="username" placeholder="Enter your name" />
 	</div>
 	<br>
-	
+	<p>Suggest up to 5 books for our reading list.</p>
 	<div class="search-container">
 		<input type="text" id="search" placeholder="Search for a book..." />
 		<div class="results" id="results"></div>
@@ -79,33 +79,56 @@
 			});
 		}
 		
-		document.getElementById('submitBtn').addEventListener('click', async () =>{
+		document.getElementById('submitBtn').addEventListener('click', async () => {
 			const name = document.getElementById('username').value.trim();
 			if (!name) { alert("Please enter your name before submitting."); return; }
 			if (cart.length === 0) { alert("Add at least one book!"); return; }
 
 			overlay.innerText = "Submitting your data...";
 			overlay.style.display = 'flex';
-			
-			for (let book of cart) {
-				await fetch("https://script.google.com/macros/s/AKfycbwdJNaDbyEAkCDQs5J0OfjMhXZQC6twPfb6KCbs89HMBj-HbhCOAJi1nIcMbpHJDXfgBQ/exec", {
-					method: "POST", 
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({
-						title: book.title,
-						author: book.author,
-						name: name
-					})
-				});
-			}
 
-			overlay.innerText = `Confirmed, Books Received. Thanks for participating ${name}!`;
-			setTimeout(() => overlay.style.display = 'none', 3000);
-			cart.length = 0;
-			renderCart();
-			document.getElementById('username').value = '';
+			const formURL = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/formResponse";
+
+			try {
+				for (let book of cart) {
+					// Build the form data
+					const formData = new URLSearchParams();
+					formData.append("entry.2129528733", name);         // Name
+					formData.append("entry.2035838102", book.title);   // Book Title
+					formData.append("entry.636384511", book.author);   // Author
+
+					// Submit using fetch
+					await fetch(formURL, {
+						method: "POST",
+						mode: "no-cors", // Important for Google Forms
+						headers: { "Content-Type": "application/x-www-form-urlencoded" },
+						body: formData.toString()
+					});
+				}
+
+				overlay.innerText = `Confirmed, Books Received. Thanks for participating ${name}!`;
+				setTimeout(() => overlay.style.display = 'none', 3000);
+
+				cart.length = 0;
+				renderCart();
+				document.getElementById('username').value = '';
+			} catch (err) {
+				overlay.innerText = `Error submitting: ${err}`;
+				console.error("Error submitting:", err);
+			}
 		});
+
+
+
 
 	</script>
 </body>
+
+/*
+
+https://docs.google.com/forms/d/e/1FAIpQLSfry7cZX5v6UEitecHGtXm4dzeEesIgPybdqc2iGH4UfGv4QA/viewform?usp=pp_url&entry.2129528733=fff&entry.2035838102=fff&entry.636384511=ffff
+
+*/
+
+
 </html>
