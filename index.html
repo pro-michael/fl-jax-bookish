@@ -40,11 +40,11 @@
 		
 		document.getElementById('search').addEventListener('input', async (e) => {
 			const query = e.target.value.trim();
-			if (query.length < 5) return; // wait until 5 chars
+			if (query.length < 3) return; // wait until 5 chars
 			const res = await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}`);
 			const data = await res.json();
 			resultsDiv.innerHTML = '';
-			data.docs.slice(0,5).forEach(book => {
+			data.docs.slice(0,9).forEach(book => {
 				const title = book.title;
 				const author = book.author_name ? book.author_name[0] : 'unknown';
 				const cover = book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : '';

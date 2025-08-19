@@ -61,7 +61,11 @@ button:hover {
     margin-bottom: 30px;
 }
 
-.results,
+.results {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 20px;
+}
 .cart {
     margin-top: 20px;
 }
