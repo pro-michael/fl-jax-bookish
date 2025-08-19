@@ -41,7 +41,7 @@ input[type="text"] {
 
 /* Buttons */
 button {
-    background-color: #D4A373; /* Amber */
+    background-color: #a35f2d; /* Amber */
     color: #FFF;
     border: none;
     padding: 8px 15px;
@@ -53,12 +53,20 @@ button {
 }
 
 button:hover {
-    background-color: #B87A50; /* Darker amber */
+    background-color: #8c4d1f; /* Darker amber */
 }
 
 /* Search & Cart Containers */
+.sticky-container {
+	position: sticky;
+	top: 0;
+	background: rgba(250, 243, 224, 0.75);
+	padding: 15px;
+	z-index: 1000;
+	backdrop-filter: blur(5px);
+}
 .search-container {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .results {
@@ -68,6 +76,13 @@ button:hover {
 }
 .cart {
     margin-top: 20px;
+}
+#cart > div {
+	margin-bottom: 10px;
+	padding: 5px;
+	border: 2px solid #ddd;
+	border-radius: 5px;
+	box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
 }
 
 /* Book Items */
@@ -165,4 +180,7 @@ button:hover {
 	.overlay {
 		font-size: 18px;
 	}
+	.cart button {
+		font-size: 0.8rem;
+		padding: 3px 6px;
 }
