@@ -52,9 +52,12 @@
 				const div = document.createElement('div');
 				div.className = 'book-item';
 				div.innerHTML = `
-					${cover ? `<img src="${cover}">` : ''}
-					<span>${title} - ${author}</span>
-					<button>Add</button>
+					${cover ? `<img src="${cover}">` : '<div style="width:100px;"></div>'}
+					<div class="book-info">
+						<span class="title">${title}</span>
+						<span class="author">${author}</span>
+						<button>Add</button>
+					</div>
 				`;
 				div.querySelector('button').addEventListener('click', () => addToCart(title, author));
 				resultsDiv.appendChild(div);
