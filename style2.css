@@ -147,7 +147,7 @@ button:hover {
         width: 90%;
     }
 	.results {
-		grid-template-columns: 2fr;
+		grid-template-columns: repeat(2, 1fr);
 	}
     .book-item {
         flex-direction: column;
