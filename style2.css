@@ -142,10 +142,13 @@ button:hover {
 }
 
 /* Mobile Responsiveness */
-@media (max-width: 600px) {
+@media (max-width: 500px) {
     input[type="text"] {
         width: 90%;
     }
+	.results {
+		grid-template-columns: 2fr;
+	}
     .book-item {
         flex-direction: column;
 		align-items: center;
