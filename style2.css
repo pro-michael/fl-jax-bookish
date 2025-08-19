@@ -97,7 +97,6 @@ button:hover {
     background: rgba(62, 44, 28, 0.8); /* Dark semi-transparent */
     color: #fff;
     font-size: 28px;
-    display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
