@@ -1,0 +1,120 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+
+/* Base Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 20px;
+    text-align: center;
+    background-color: #FAF3E0; /* Soft cream */
+    color: #3E2C1C; /* Dark chocolate brown */
+}
+
+h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 10px;
+    color: #5C4033; /* Warm brown */
+}
+
+h1 {
+    font-size: 3em;
+}
+
+h2 {
+    font-size: 2em;
+}
+
+h3 {
+    font-size: 1.5em;
+}
+
+/* Input Styles */
+input[type="text"] {
+    padding: 10px;
+    width: 80%;
+    max-width: 400px;
+    border: 2px solid #D4A373;
+    border-radius: 5px;
+    margin-top: 5px;
+    font-size: 1em;
+}
+
+/* Buttons */
+button {
+    background-color: #D4A373; /* Amber */
+    color: #FFF;
+    border: none;
+    padding: 8px 15px;
+    margin-left: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #B87A50; /* Darker amber */
+}
+
+/* Search & Cart Containers */
+.search-container {
+    margin-bottom: 30px;
+}
+
+.results,
+.cart {
+    margin-top: 20px;
+}
+
+/* Book Items */
+.book-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFF8F0; /* Light parchment */
+    padding: 8px 12px;
+    margin: 5px auto;
+    border-radius: 6px;
+    max-width: 600px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.book-item img {
+    width: 50px;
+    height: auto;
+    margin-right: 15px;
+    border-radius: 4px;
+}
+
+/* Overlay */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(62, 44, 28, 0.8); /* Dark semi-transparent */
+    color: #fff;
+    font-size: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    z-index: 1000;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    input[type="text"] {
+        width: 90%;
+    }
+    .book-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    .book-item img {
+        margin: 0 0 10px 0;
+    }
+}
