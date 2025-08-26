@@ -1,134 +1,53 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title> Books & Beers - Reading List Submission</title>
-	<link rel="stylesheet" href="style2.css">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Books & Beers</title>
+  <!-- Import Playfair Display -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 20px;
+      text-align: center;
+      background-color: #FAF3E0; /* Soft cream */
+      color: #3E2C1C; /* Dark chocolate brown */
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3em;
+      margin-bottom: 10px;
+      color: #5C4033; /* Warm brown */
+    }
+    p {
+      font-size: 1.3em;
+      margin: 15px 0;
+    }
+    .links a {
+      display: inline-block;
+      margin: 0.5rem;
+      padding: 10px 18px;
+      background-color: #a35f2d; /* Amber */
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    .links a:hover {
+      background-color: #8c4d1f; /* Darker amber */
+    }
+  </style>
 </head>
 <body>
-	<h1>FL Jax Bookish</h1>
-	<h2>Beers & Books</h2>
-	<h3>What should we read next?</h3>
-	<div>
-		<label for="username">What's Your Name?</label><br>
-		<input type="text" id="username" placeholder="Enter your name" />
-	</div>
-	<br>
-		
-	<div class="sticky-container">
-		<div class="search-container">
-			<label>Suggest up to 5 books for our reading list.</label><br>
-			<input type="text" id="search" placeholder="Search for a book..." />
-			
-		</div>
-	</div>
-	
-	<div class="results" id="results"></div>
-	<h3>Your Suggestions:</h3>
-	<div class="cart" id="cart"></div>
-	<br>
-	<button id="submitBtn">Submit</button>
-	
-	
-	<div class="overlay" id="overlay">Submitting your data...</div>
-	
-	<script>
-		const resultsDiv = document.getElementById('results');
-		const cartDiv = document.getElementById('cart');
-		const overlay = document.getElementById('overlay');
-		const cart = [];
-		
-		document.getElementById('search').addEventListener('input', async (e) => {
-			const query = e.target.value.trim();
-			if (query.length < 3) return; // wait until 5 chars
-			const res = await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(query)}`);
-			const data = await res.json();
-			resultsDiv.innerHTML = '';
-			data.docs.slice(0,9).forEach(book => {
-				const title = book.title;
-				const author = book.author_name ? book.author_name[0] : 'unknown';
-				const cover = book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg` : '';
-				
-				const div = document.createElement('div');
-				div.className = 'book-item';
-				div.innerHTML = `
-					${cover ? `<img src="${cover}">` : '<div style="width:100px;"></div>'}
-					<div class="book-info">
-						<span class="title">${title}</span>
-						<span class="author">${author}</span>
-						<button>Add</button>
-					</div>
-				`;
-				div.querySelector('button').addEventListener('click', () => addToCart(title, author));
-				resultsDiv.appendChild(div);
-			});
-		});
-		
-		function addToCart(title, author) {
-			if (cart.length >=5) { alert("You can only add 5 books!"); return; }
-			cart.push({title, author});
-			renderCart();
-		}
-		
-		function renderCart() {
-			cartDiv.innerHTML = '';
-			cart.forEach((b, i) => {
-				const div = document.createElement('div');
-				div.innerHTML = `${b.title} - ${b.author} <button>X Remove</button>`;
-				div.querySelector('button').addEventListener('click', () => {
-					cart.splice(i,1);
-					renderCart();
-				});
-				cartDiv.appendChild(div);
-			});
-		}
-		
-		document.getElementById('submitBtn').addEventListener('click', async () => {
-			const name = document.getElementById('username').value.trim();
-			if (!name) { alert("Please enter your name before submitting."); return; }
-			if (cart.length === 0) { alert("Add at least one book!"); return; }
-
-			overlay.innerText = "Submitting your data...";
-			overlay.style.display = 'flex';
-
-			const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSfry7cZX5v6UEitecHGtXm4dzeEesIgPybdqc2iGH4UfGv4QA/formResponse";
-
-			try {
-				for (let book of cart) {
-					// Build the form data
-					const formData = new URLSearchParams();
-					formData.append("entry.2129528733", name);         // Name
-					formData.append("entry.2035838102", book.title);   // Book Title
-					formData.append("entry.636384511", book.author);   // Author
-
-					// Submit using fetch
-					await fetch(formURL, {
-						method: "POST",
-						mode: "no-cors", // Important for Google Forms
-						headers: { "Content-Type": "application/x-www-form-urlencoded" },
-						body: formData.toString()
-					});
-				}
-
-				overlay.innerHTML = `Confirmed, Books Received.<br>Thanks for participating, ${name}!`;
-				setTimeout(() => overlay.style.display = 'none', 3000);
-
-				cart.length = 0;
-				renderCart();
-				document.getElementById('username').value = '';
-			} catch (err) {
-				overlay.innerText = `Error submitting: ${err}`;
-				console.error("Error submitting:", err);
-			}
-		});
-
-
-
-
-	</script>
-
+  <h1>📚 Books & Beers 🍻</h1>
+  <p>Sorry, submissions have ended.</p>
+  <p>Better luck next time (yes, there will be a next time).
+  <p>In the mean time, visit us on social:</p>
+  <div class="links">
+    <a href="https://www.instagram.com/fljaxbookish" target="_blank">Instagram</a>
+    <a href="https://www.reddit.com/r/FLJaxBookish" target="_blank">Reddit</a>
+  </div>
 </body>
 </html>
