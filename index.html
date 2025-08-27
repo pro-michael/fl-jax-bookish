@@ -1,53 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Books & Beers</title>
-  <!-- Import Playfair Display -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      margin: 20px;
-      text-align: center;
-      background-color: #FAF3E0; /* Soft cream */
-      color: #3E2C1C; /* Dark chocolate brown */
-    }
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 3em;
-      margin-bottom: 10px;
-      color: #5C4033; /* Warm brown */
-    }
-    p {
-      font-size: 1.3em;
-      margin: 15px 0;
-    }
-    .links a {
-      display: inline-block;
-      margin: 0.5rem;
-      padding: 10px 18px;
-      background-color: #a35f2d; /* Amber */
-      color: #fff;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
-    }
-    .links a:hover {
-      background-color: #8c4d1f; /* Darker amber */
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books & Beers — Veto</title>
+    <link rel="stylesheet" href="style2.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Ensure text inputs (name + email) match size */
+        .field input[type="text"],
+        .field input[type="email"] {
+            padding: 10px;
+            width: 80%;
+            max-width: 400px;
+            border: 2px solid #D4A373;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+    </style>
 </head>
 <body>
-  <h1>📚 Books & Beers 🍻</h1>
-  <p>Sorry, submissions have ended.</p>
-  <p>Better luck next time (yes, there will be a next time).
-  <p>In the mean time, visit us on social:</p>
-  <div class="links">
-    <a href="https://www.instagram.com/fljaxbookish" target="_blank">Instagram</a>
-    <a href="https://www.reddit.com/r/FLJaxBookish" target="_blank">Reddit</a>
-  </div>
+    <h1>📚 Books & Beers Book Club 🍻</h1>
+
+    <h2>For those of you that submitted book recommendations,<br>
+        you now have some VETO power.</h2>
+    <h3>Select up to <strong>2</strong> books from the list below to remove from the running.</h3>
+
+    <form id="vetoForm">
+        <input type="hidden" id="googleFormAction"
+            value="https://docs.google.com/forms/d/e/1FAIpQLSfry7cZX5v6UEitecHGtXm4dzeEesIgPybdqc2iGH4UfGv4QA/formResponse">
+
+        <div class="field">
+            <label for="userName">Your Name</label><br>
+            <input type="text" id="userName" required>
+        </div>
+        <div class="field">
+            <label for="userEmail">Email</label><br>
+            <input type="email" id="userEmail" required>
+        </div>
+
+        <div id="bookList" class="results"></div>
+
+        <h4>Your Veto List (max 2)</h4>
+        <div id="cart" class="cart"></div>
+
+        <button type="submit">Submit Veto</button>
+    </form>
+
+    <div id="toast" class="overlay">Added to Veto List.</div>
+
+    <script>
+        // Config
+        const FORM_ACTION = document.getElementById('googleFormAction').value;
+
+        // Google Form entry IDs
+        const ENTRY_NAME_EMAIL = "entry.2129528733";
+        const ENTRY_BOOK_TITLE = "entry.2035838102";
+        const ENTRY_AUTHOR = "entry.636384511";
+
+        // State
+        const selected = [];
+
+        // DOM elements
+        const listEl = document.getElementById('bookList');
+        const cartEl = document.getElementById('cart');
+        const formEl = document.getElementById('vetoForm');
+        const userNameEl = document.getElementById('userName');
+        const userEmailEl = document.getElementById('userEmail');
+        const toastEl = document.getElementById('toast');
+
+        const BOOKS = [
+            { isbn:  "9781595148049",  title:  "An Ember in the Ashes",  author:  "Sabaa Tahir" },
+			{ isbn:  "9781250824042",  title:  "Annihilation",  author:  "Jeff VanderMeer" },
+			{ isbn:  "9781501160844",  title:  "Anxious People",  author:  "Fredrik Backman" },
+			{ isbn:  "9780593722824",  title:  "Assassin's Apprentice",  author:  "Robin Hobb" },
+			{ isbn:  "9781416558491",  title:  "Bloodsucking Fiends",  author:  "Christopher Moore" },
+			{ isbn:  "9781250320520",  title:  "Bury Our Bones in the Midnight Soil",  author:  "V. E. Schwab" },
+			{ isbn:  "9780525556572",  title:  "Everything Is Tuberculosis",  author:  "John Green" },
+			{ isbn:  "9781101972083",  title:  "Exhalation",  author:  "Ted Chiang" },
+			{ isbn:  "9780593418918",  title:  "God of the Woods",  author:  "Liz Moore" },
+			{ isbn:  "9780743296441",  title:  "House Rules",  author:  "Jodi Picoult" },
+			{ isbn:  "9780679751526",  title:  "Midnight in the Garden of Good and Evil",  author:  "John Berendt" },
+			{ isbn:  "9780062073501",  title:  "Murder on the Orient Express",  author:  "Agatha Christie" },
+			{ isbn:  "9781982179014",  title:  "None of This Is True",  author:  "Lisa Jewell" },
+			{ isbn:  "9780593977057",  title:  "Not Quite Dead Yet",  author:  "Holly Jackson" },
+			{ isbn:  "9781455563920",  title:  "Pachinko",  author:  "Min Jin Lee" },
+			{ isbn:  "9781668006399",  title:  "River Is Waiting",  author:  "Wally Lamb" },
+			{ isbn:  "9780553380958",  title:  "Snow Crash",  author:  "Neal Stephenson" },
+			{ isbn:  "9781590171998",  title:  "Stoner",  author:  "John Williams" },
+			{ isbn:  "9781982131906",  title:  "The Book of Lost Names",  author:  "Kristin Harmel" },
+			{ isbn:  "9781594634024",  title:  "The Girl on the Train",  author:  "Paula Hawkins" },
+			{ isbn:  "9781250145451",  title:  "The Grace Year",  author:  "Kim Liggett" },
+			{ isbn:  "9780062914125",  title:  "The Lost Bookshop",  author:  "Evie Gaughan" },
+			{ isbn:  "9781250304469",  title:  "The Maidens",  author:  "Alex Michaelides" },
+			{ isbn:  "9780440245933",  title:  "The Pelican Brief",  author:  "John Grisham" },
+			{ isbn:  "9781984880987",  title:  "The Thursday Murder Club",  author:  "Richard Osman" },
+			{ isbn:  "9781501154652",  title:  "Then She Was Gone",  author:  "Lisa Jewell" },
+			{ isbn:  "9780062457806",  title:  "They Both Die at the End",  author:  "Adam Silvera" },
+			{ isbn:  "9780593466490",  title:  "Tomorrow, and Tomorrow, and Tomorrow",  author:  "Gabrielle Zevin" },
+			{ isbn:  "9780358447849",  title:  "Wool",  author:  "Hugh Howey" },
+			{ isbn:  "9780141439556",  title:  "Wuthering Heights",  author:  "Emily Bronte" }
+
+        ];
+
+        // Fetch book details including page count
+        async function fetchBookDetails(book) {
+            try {
+                const response = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${book.isbn}&format=json&jscmd=data`);
+                const data = await response.json();
+                const key = `ISBN:${book.isbn}`;
+                const bookData = data[key];
+                return bookData ? bookData.number_of_pages : 'N/A';
+            } catch (error) {
+                console.error(`Error fetching page count for ${book.title}:`, error);
+                return 'N/A';
+            }
+        }
+
+        // Render books
+        async function renderBooks() {
+            listEl.innerHTML = '';
+            for (const book of BOOKS) {
+                const pageCount = await fetchBookDetails(book);
+                const item = document.createElement('div');
+                item.className = 'book-item';
+
+                // Build cover URL
+                const coverUrl = `https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg`;
+
+                item.innerHTML = `
+                    <img src="${coverUrl}" alt="Cover of ${book.title}" onerror="this.src='https://via.placeholder.com/100x150?text=No+Cover'">
+                    <div class="book-info">
+                        <span class="title">${book.title}</span>
+                        <span class="author">${book.author}</span>
+                        <span class="page-count">${pageCount} pages</span>
+                        <button type="button">VETO</button>
+                    </div>`;
+
+                item.querySelector('button').addEventListener('click', () => addToVeto(book));
+                listEl.appendChild(item);
+            }
+        }
+
+        // Veto cart
+        function addToVeto(book) {
+            if (selected.length >= 2) {
+                showToast('Limit reached (2).');
+                return;
+            }
+            if (selected.some(s => s.title === book.title)) {
+                showToast('Already in Veto List.');
+                return;
+            }
+            selected.push(book);
+            renderCart();
+            showToast('Added to Veto List.');
+        }
+
+        function removeFromVeto(i) {
+            selected.splice(i, 1);
+            renderCart();
+        }
+
+        function renderCart() {
+            cartEl.innerHTML = '';
+            selected.forEach((b, i) => {
+                const row = document.createElement('div');
+                row.innerHTML = `
+                    <span class="title">${b.title} — ${b.author}</span>
+                    <button type="button">Remove</button>`;
+                row.querySelector('button').addEventListener('click', () => removeFromVeto(i));
+                cartEl.appendChild(row);
+            });
+        }
+
+        // Toast
+        function showToast(msg) {
+            toastEl.textContent = msg;
+            toastEl.style.display = 'flex';
+            setTimeout(() => toastEl.style.display = 'none', 1200);
+        }
+
+        // Submit handler
+        formEl.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = userNameEl.value.trim();
+            const email = userEmailEl.value.trim();
+            if (!name || !email) {
+                showToast('Enter name + email.');
+                return;
+            }
+
+            // ✅ Require at least one veto
+            if (selected.length === 0) {
+                showToast('Please select at least one book to veto.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append(ENTRY_NAME_EMAIL, `${name} / ${email}`);
+
+            selected.forEach(b => {
+                formData.append(ENTRY_BOOK_TITLE, b.title);
+                formData.append(ENTRY_AUTHOR, b.author);
+            });
+
+            fetch(FORM_ACTION, {
+                method: "POST",
+                mode: "no-cors",
+                body: formData
+            }).then(() => {
+                showToast("Submitted!");
+                formEl.reset();
+                selected.length = 0;
+                renderCart();
+            });
+        });
+
+        // Init
+        renderBooks();
+    </script>
 </body>
 </html>
